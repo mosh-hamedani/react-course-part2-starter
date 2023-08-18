@@ -16,7 +16,7 @@ const fetchTodos = () =>
 
 const TodoList = () => {
   // to fetch data with react query I use the query hook from tanstack, I call it () and give it a configuration object {} with two property. I call a query hook and get a query object that has a bunch of properties like data, error, isLoading and so on.
-  const query = useQuery({
+  const query = useQuery<Todo[], Error>({
     // The first one queryKey: unique identifier for the query which is used internally for the caching. So anytime I retrieve a piece of data from the backend the data will store in cache and will be accessible via this key. I set it to an array of one or more values. The first value is often a string that identifies the type of data store here.
     queryKey: ["todos"],
     // The second property is query function. This is the function that we use to fetch the data from the backend. This function should return a promise that resolve the data or throws an error.
@@ -24,9 +24,13 @@ const TodoList = () => {
     queryFn: fetchTodos,
   });
 
-  const { data: todos } = query; //Or I could destructure it in the above function right away //I rename data to todos
+  const { data: todos, error } = query; //Or I could destructure it in the above function right away //I rename data to todos
 
-  // if (error) return <p>{error}</p>;
+  // I have a compilation error says Type '{}' is not assignable to type 'ReactNode'. It means React doesn't know haw to render this object. When I check the signature of error object inside query object it is unknown => const error: unknown ===> It means React Query does not know the type of errors that may happen when fetching data. Because that is really dependent on how we fetch the data(Axios/fetch API/or another http library)
+  // In Axios all errors are instance of Error interface that is available in all browsers. So when calling query hook I should specify the type of errors that may happen when fetching data. So in front of useQuery I add <Todo[], Error>
+  // Now error in above line is instance of Error or null. When I check its signature I find out it. => "const error: Error | null"
+  // Now I should fix that by rendering one of properties of this object by chaining like message
+  if (error) return <p>{error.message}</p>;
 
   return (
     <ul className="list-group">
