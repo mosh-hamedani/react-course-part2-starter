@@ -14,6 +14,7 @@ const fetchTodos = () =>
     .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
     .then((res) => res.data);
 
+//HERE MY FUNCTION COMPONENT STARTS
 const TodoList = () => {
   // to fetch data with react query I use the query hook from tanstack, I call it () and give it a configuration object {} with two property. I call a query hook and get a query object that has a bunch of properties like data, error, isLoading and so on.
   const query = useQuery<Todo[], Error>({
@@ -24,7 +25,10 @@ const TodoList = () => {
     queryFn: fetchTodos,
   });
 
-  const { data: todos, error } = query; //Or I could destructure it in the above function right away //I rename data to todos
+  const { data: todos, error, isLoading } = query; //Or I could destructure it in the above function right away //I rename data to todos
+
+  // For showing Loader indicator I could use another object from query object called isLoading.
+  if (isLoading) return <p>Loading...</p>;
 
   // I have a compilation error says Type '{}' is not assignable to type 'ReactNode'. It means React doesn't know haw to render this object. When I check the signature of error object inside query object it is unknown => const error: unknown ===> It means React Query does not know the type of errors that may happen when fetching data. Because that is really dependent on how we fetch the data(Axios/fetch API/or another http library)
   // In Axios all errors are instance of Error interface that is available in all browsers. So when calling query hook I should specify the type of errors that may happen when fetching data. So in front of useQuery I add <Todo[], Error>
