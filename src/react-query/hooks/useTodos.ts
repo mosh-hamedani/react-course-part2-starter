@@ -17,7 +17,7 @@ const useTodos = () => {
   return useQuery<Todo[], Error>({
     queryKey: ["todos"],
     queryFn: fetchTodos,
-    staleTime: 10 * 1000, //10s it is not globally configured
+    staleTime: 10 * 1000, //10s it is not globally
   });
 };
 export default useTodos;
