@@ -19,8 +19,8 @@ const usePosts = (userId: number | undefined) => {
   return useQuery<Post[], Error>({
     // The queryKey is exactly the same as ==> /users/1/posts
     // Moreover, anytime the userId changes our query will get re-executed(like dependency array in useEffect hook)
-
-    queryKey: ["users", userId, "posts"],
+    // there is a point, IF I CHECK THE QueryDEVTOOLS I got null when all users selected, but it is ugly. I could fix it very easy
+    queryKey: userId ? ["users", userId, "posts"] : ["posts"],
     queryFn: fetchPosts,
     staleTime: 1 * 60 * 1000, //1m
   });
