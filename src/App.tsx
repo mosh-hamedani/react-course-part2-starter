@@ -1,5 +1,6 @@
 import "./App.css";
 import PostList from "./react-query/PostList";
+import TodoForm from "./react-query/TodoForm";
 import TodoList from "./react-query/TodoList";
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
     <>
       <div className="container row">
         <div className="col">
-          <h1>Todos</h1>
+          <h1>To Do Lists</h1>
+          <TodoForm />
           <TodoList />
         </div>
         <div className="col">
