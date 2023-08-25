@@ -5,7 +5,14 @@ import axios from "axios";
 
 const TodoForm = () => {
   const QueryClient = useQueryClient();
-  const addTodo = useMutation({
+  // The React Query doesn't know what kind of error we might get. So similar to the previous,  I should supply generic type arguments when writing(creating) a mutation==>
+  // As soon as I put < in front of useMutation I see a message : ===>
+  // useMutation<TData = unknown, TError = unknown, TVariables = void, TContext = unknown>(options: UseMutationOptions<TData, TError, TVariables, TContext>): UseMutationResult<TData, TError, TVariables, TContext>
+  // TData : present the kind of data that I get from backend ==> Todo object
+  // TError : present my error ==> Error object
+  // TVariables : that present the data that  send to the backend ==> Todo object
+  // In some applications the data that I send to backend is different from the data that I receive from it.
+  const addTodo = useMutation<Todo, Error, Todo>({
     mutationFn: (todo: Todo) =>
       axios
         .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
@@ -27,28 +34,33 @@ const TodoForm = () => {
   const ref = useRef<HTMLInputElement>(null);
 
   return (
-    <form
-      className="row mb-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        // I've got compilation error for title ==> Type 'undefined' is not assignable to type 'string'. ==> I wanna make sure that the user types a value in the input field before I send a post request to the backend
-        if (ref.current && ref.current.value)
-          addTodo.mutate({
-            id: 0,
-            // Compilation error==>'ref.current' is possibly 'null'.==> So I should use optional chaining.
-            title: ref.current?.value,
-            completed: false,
-            userId: 1,
-          });
-      }}
-    >
-      <div className="col">
-        <input ref={ref} type="text" className="form-control" />
-      </div>
-      <div className="col">
-        <button className="btn btn-primary">Add</button>
-      </div>
-    </form>
+    <>
+      {addTodo.error && (
+        <div className="alert alert-danger">{addTodo.error.message}</div>
+      )}
+      <form
+        className="row mb-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          // I've got compilation error for title ==> Type 'undefined' is not assignable to type 'string'. ==> I wanna make sure that the user types a value in the input field before I send a post request to the backend
+          if (ref.current && ref.current.value)
+            addTodo.mutate({
+              id: 0,
+              // Compilation error==>'ref.current' is possibly 'null'.==> So I should use optional chaining.
+              title: ref.current?.value,
+              completed: false,
+              userId: 1,
+            });
+        }}
+      >
+        <div className="col">
+          <input ref={ref} type="text" className="form-control" />
+        </div>
+        <div className="col">
+          <button className="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </>
   );
 };
 
