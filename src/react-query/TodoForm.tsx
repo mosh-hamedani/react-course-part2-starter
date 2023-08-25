@@ -3,35 +3,42 @@ import { useRef } from "react";
 import { Todo } from "./hooks/useTodos";
 import axios from "axios";
 
+interface AddTodoContext {
+  previousTodos: Todo[];
+}
+
 const TodoForm = () => {
   const QueryClient = useQueryClient();
-  // The React Query doesn't know what kind of error we might get. So similar to the previous,  I should supply generic type arguments when writing(creating) a mutation==>
-  // As soon as I put < in front of useMutation I see a message : ===>
-  // useMutation<TData = unknown, TError = unknown, TVariables = void, TContext = unknown>(options: UseMutationOptions<TData, TError, TVariables, TContext>): UseMutationResult<TData, TError, TVariables, TContext>
-  // TData : present the kind of data that I get from backend ==> Todo object
-  // TError : present my error ==> Error object
-  // TVariables : that present the data that  send to the backend ==> Todo object
-  // In some applications the data that I send to backend is different from the data that I receive from it.
-  const addTodo = useMutation<Todo, Error, Todo>({
+
+  const addTodo = useMutation<Todo, Error, Todo, AddTodoContext>({
+    // I've got an error here, but it is not because of mutationFn. It is because of previousTodos that I defined as an array but in onMutate function the signature says it could be ==> const previousTodos: Todo[] | undefined ====>So to solve that I add || [] to the end of that constant.
     mutationFn: (todo: Todo) =>
       axios
         .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
         .then((res) => res.data),
-    onSuccess: (savedTodo, newTodo) => {
-      // APPROACH 1: Invalidating the cache ==> It cause a refetch data from backend, but because it is a fake API the item did not really save on it. So I cannot use this approach.
-      // QueryClient.invalidateQueries({
-      //   //this will invalidate all queries whose key start with 'todos'
-      //   queryKey: ['todos']
-      // })
-      //Again, this does not work with JsonPlaceHolder so I wanna use another approach.
-      //APPROACH 2: Updating the data in the cache directly
+
+    // I have another function here called onMutate to implement optimistic updates
+    onMutate: (newTodo: Todo) => {
+      const previousTodos = QueryClient.getQueryData<Todo[]>(["todos"]) || [];
       QueryClient.setQueryData<Todo[]>(["todos"], (todos) => [
-        savedTodo,
+        newTodo,
         ...(todos || []),
       ]);
-
-      // To erase the input value, I set input value to empty string inside onSuccess attribute
       if (ref.current) ref.current.value = "";
+      return { previousTodos };
+    },
+    // Now for handling success and error scenario
+    onSuccess: (savedTodo, newTodo) => {
+      QueryClient.setQueryData<Todo[]>(["todos"], (todos) =>
+        todos?.map((todo) => (todo === newTodo ? savedTodo : todo))
+      );
+    },
+
+    // If the request failed, I should roll back and restore the UI to the previous state. However, I need a context object that includes the previous todos before I updated the cache. I create a context object in above inside the onMutate function.
+    onError: (error, newTodo, context) => {
+      if (!context) return;
+
+      QueryClient.setQueryData<Todo[]>(["todos"], context.previousTodos);
     },
   });
   const ref = useRef<HTMLInputElement>(null);
