@@ -29,6 +29,9 @@ const TodoForm = () => {
         savedTodo,
         ...(todos || []),
       ]);
+
+      // To erase the input value, I set input value to empty string inside onSuccess attribute
+      if (ref.current) ref.current.value = "";
     },
   });
   const ref = useRef<HTMLInputElement>(null);
