@@ -1,4 +1,4 @@
-interface Task {
+export interface Task {
   id: number;
   title: string;
 }
@@ -15,7 +15,7 @@ interface DeleteTask {
   taskId: number;
 }
 // Now I define a type, called TaskAction, which is a union of these interfaces
-type TaskAction = AddTask | DeleteTask;
+export type TaskAction = AddTask | DeleteTask;
 
 // As a BP I should annotate this reducer with the return type. So, if I make a mistake the TS compiler will let me know.
 const tasksReducer = (tasks: Task[], action: TaskAction): Task[] => {
