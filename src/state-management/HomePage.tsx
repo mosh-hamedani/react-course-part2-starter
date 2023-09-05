@@ -1,4 +1,4 @@
-import TaskList from "./TaskList";
+import { TaskList } from "./tasks";
 import useAuth from "./hooks/useAuth";
 
 const HomePage = () => {
