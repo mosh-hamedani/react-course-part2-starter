@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import TaskList from "./TaskList";
-import AuthContext from "./contexts/authContext";
+import useAuth from "./hooks/useAuth";
 
 const HomePage = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   return (
     <>
       {user && <p className="mt-3">Hello dear {user}</p>}
