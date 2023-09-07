@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
+import useCounterStore from "./store";
 
 interface CounterStore {
   counter: number;
@@ -13,4 +15,9 @@ const useCounterStore = create<CounterStore>()((set) => ({
   reset: () => set(() => ({ counter: 0 })),
 }));
 
+if (process.env.NODE_ENV === "development") {
+  // the first parameter is the name that we give to our store and this will appear in react devtools
+  // the second argument is our custom hook that is returned here
+  mountStoreDevtool("Counter Store", useCounterStore);
+}
 export default useCounterStore;
