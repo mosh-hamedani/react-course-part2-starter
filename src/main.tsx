@@ -5,6 +5,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
+import { RouterProvider } from "react-router-dom";
+import router from "./routing/routes";
 
 // On the below line that I create a new queryClient, I can pass a configuration object
 const queryClient = new QueryClient({
@@ -25,8 +27,8 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
-      {/* So it only goes in my development build, and later when I build for production, ReactQueryDevTools is not going to be included. */}
+      {/* Instead of using a specific component like App, we render RouterProvider and let react-router decide what component should be rendered depending on the users location. This is the idea of routing. */}
+      <RouterProvider router={router} />
       <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>
