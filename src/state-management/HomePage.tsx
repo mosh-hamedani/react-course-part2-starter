@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import AuthContext from "./auth/authContext";
 import { TaskList } from "./tasks";
+import useAuthStore from "./auth/store";
 
 const HomePage = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuthStore();
   return (
     <>
       {user && <p className="mt-3">Hello dear {user}</p>}
