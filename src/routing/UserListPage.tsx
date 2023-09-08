@@ -13,7 +13,7 @@ const UserListPage = () => {
           <li className="list-group-item" key={user.id}>
             {/* <a href="#">{user.name}</a> */}
 
-            <Link to={`/users/${user.id}/${user.name}`}>{user.name}</Link>
+            <Link to={`/users/${user.id}`}>{user.name}</Link>
           </li>
         ))}
       </ul>
