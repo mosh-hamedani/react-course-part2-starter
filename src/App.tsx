@@ -1,7 +1,17 @@
-import './App.css';
+import "./App.css";
+import { TasksProvider } from "./state-management/tasks";
+import HomePage from "./state-management/HomePage";
+import NavBar from "./state-management/NavBar";
+import Counter from "./state-management/counter/Counter";
 
 function App() {
-  return <h1>React Starter Project</h1>;
+  return (
+    <TasksProvider>
+      <Counter />
+      <NavBar />
+      <HomePage />
+    </TasksProvider>
+  );
 }
 
 export default App;
