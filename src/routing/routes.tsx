@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import UserDetail from "./UserDetail";
 import UserPage from "./Userpage";
 import ErrorPage from "./ErrorPage";
+import LoginPage from "./LoginPage";
 // I call it and give it an array of object ==>(routes: RouteObject[], opts?: DOMRouterOpts | undefined): Router
 // Each route object should have two properties. path and element
 const router = createBrowserRouter([
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />, //started from V6.0
     children: [
       { path: "", element: <HomePage /> }, //index: true || path: ''
+      { path: "/login", element: <LoginPage /> },
       {
         path: "users",
         element: <UserPage />,
