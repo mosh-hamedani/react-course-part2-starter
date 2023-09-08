@@ -4,7 +4,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-const UserDetailPage = () => {
+const UserDetail = () => {
   const navigate = useNavigate();
 
   // Methods for accessing the route parameters:
@@ -26,14 +26,11 @@ const UserDetailPage = () => {
   console.log(location);
 
   return (
-    <>
+    <div className="mx-3 p-3 border">
       <h1>Hi, {params.name}</h1>
       <p>user {params.id} detail page </p>
-      <button className="btn btn-primary" onClick={() => navigate("/users")}>
-        Back to List
-      </button>
-    </>
+    </div>
   );
 };
 
-export default UserDetailPage;
+export default UserDetail;

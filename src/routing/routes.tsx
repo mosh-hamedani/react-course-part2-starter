@@ -1,10 +1,11 @@
 // createBrowserRouter has more functionalities than <BrowserRouter> component
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "./HomePage";
-import UserListPage from "./UserListPage";
+import UserList from "./UserList";
 import ContactPage from "./ContactPage";
-import UserDetailPage from "./UserDetailPage";
+import UserDetail from "./UserDetail";
 import Layout from "./Layout";
+import UserPage from "./Userpage";
 // I call it and give it an array of object ==>(routes: RouteObject[], opts?: DOMRouterOpts | undefined): Router
 // Each route object should have two properties. path and element
 const router = createBrowserRouter([
@@ -13,9 +14,12 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "", element: <HomePage /> }, //index: true || path: ''
-      { path: "users", element: <UserListPage /> },
+      {
+        path: "users",
+        element: <UserPage />,
+        children: [{ path: ":id/:name", element: <UserDetail /> }],
+      },
       { path: "contact", element: <ContactPage /> },
-      { path: "users/:id", element: <UserDetailPage /> },
     ],
   },
 ]);
