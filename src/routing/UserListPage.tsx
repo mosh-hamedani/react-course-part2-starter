@@ -11,7 +11,9 @@ const UserListPage = () => {
       <ul className="list-group">
         {users.map((user) => (
           <li className="list-group-item" key={user.id}>
-            <a href="#">{user.name}</a>
+            {/* <a href="#">{user.name}</a> */}
+
+            <Link to={`/users/${user.id}`}>{user.name}</Link>
           </li>
         ))}
       </ul>
