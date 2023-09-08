@@ -13,7 +13,13 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink to="/" className="nav-link">
+              {/* NavLink automatically add active class to this element. If I prefer not to use default active, and want to change it to sth more special it is so easy. SO ====> in front od CN I pass a function  CN={({isActive})=> isActive ? 'the class name that I want for example bootstrap uses 'active nav-link' : 'nav-link'}   ==> nav-link class is only because I used Bootstrap*/}
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  isActive ? "active nav-link " : "nav-link"
+                }
+              >
                 Home
               </NavLink>
             </li>
