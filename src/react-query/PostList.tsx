@@ -1,32 +1,40 @@
 import { useState } from "react";
 import usePosts from "../hooks/usePosts";
+import React from "react";
 
 const PostList = () => {
-  const [userId, setUserId] = useState<number>();
-  const { data: posts, error, isLoading } = usePosts(userId);
+  const pageSize = 10;
+  const {
+    data: posts,
+    error,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = usePosts({ pageSize });
 
   if (error) return <p>{error.message}</p>;
   if (isLoading) return <p>Loading...</p>;
 
   return (
     <>
-      <select
-        onChange={(e) => setUserId(parseInt(e.target.value))}
-        value={userId}
-        className="form-select mb-3"
-      >
-        <option value=""></option>
-        <option value="1">User 1</option>
-        <option value="2">User 2</option>
-        <option value="3">User 3</option>
-      </select>
       <ul className="list-group">
-        {posts?.map((post) => (
-          <li key={post.id} className="list-group-item">
-            {post.title}
-          </li>
+        {posts.pages.map((page) => (
+          <React.Fragment>
+            {page.map((post) => (
+              <li key={post.id} className="list-group-item">
+                {post.title}
+              </li>
+            ))}
+          </React.Fragment>
         ))}
       </ul>
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={isFetchingNextPage}
+        className="btn btn-primary ms-1 mt-3"
+      >
+        {isFetchingNextPage ? "Loading..." : "Load More"}
+      </button>
     </>
   );
 };
