@@ -10,10 +10,6 @@
   },
   "dependencies": {
     "@tanstack/react-query": "4.28",
-<<<<<<< HEAD
-=======
-    "@tanstack/react-query-devtools": "4.28",
->>>>>>> 79a81cb3e94e71ccfd53303c7275d0aeb1e309eb
     "axios": "^1.3.4",
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
