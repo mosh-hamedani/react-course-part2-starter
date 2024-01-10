@@ -1,55 +1,35 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext, useRef } from "react";
-import { Todo } from "../hooks/useTodos";
-import axios from "axios";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const TodoForm = () => {
-  const queryClient = useQueryClient();
-  const addTodo = useMutation<Todo, Error, Todo>({
-    mutationFn: (todo: Todo) =>
-      axios
-        .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
-        .then((res) => res.data),
+interface Todo {
+  id: number;
+  title: string;
+  userId: number;
+  completed: boolean;
+}
 
-    onSuccess: (savedTodo, newTodo) => {
-      queryClient.setQueriesData<Todo[]>(["todos"], (todos) => [
-        savedTodo,
-        ...(todos || []),
-      ]);
-    },
-  });
-  const ref = useRef<HTMLInputElement>(null);
+const TodoList = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/todos')
+      .then((res) => setTodos(res.data))
+      .catch((error) => setError(error));
+  }, []);
+
+  if (error) return <p>{error}</p>;
 
   return (
-    <>
-      {addTodo.error && (
-        <div className="alert alert-danger">{addTodo.error.message}</div>
-      )}
-      <form
-        className="row mb-3"
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (ref.current && ref.current.value)
-            addTodo.mutate({
-              id: 0,
-              title: ref.current?.value,
-              userId: 1,
-              completed: false,
-            });
-          if (ref.current) ref.current.value = "";
-        }}
-      >
-        <div className="col">
-          <input ref={ref} type="text" className="form-control" />
-        </div>
-        <div className="col">
-          <button className="btn btn-primary" disabled={addTodo.isLoading}>
-            {addTodo.isLoading ? "Adding..." : "Add"}
-          </button>
-        </div>
-      </form>
-    </>
+    <ul className="list-group">
+      {todos.map((todo) => (
+        <li key={todo.id} className="list-group-item">
+          {todo.title}
+        </li>
+      ))}
+    </ul>
   );
 };
 
-export default TodoForm;
+export default TodoList;
