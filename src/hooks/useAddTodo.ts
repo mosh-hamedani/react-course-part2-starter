@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Todo } from "./useTodos";
+
 import { CACHE_KEY_TODOS } from "../react-query/constants";
 import APIClient from "../services/apiClient";
+import { Todo } from "../services/todoService";
 
 const apiClient = new APIClient<Todo>("/todos");
 
