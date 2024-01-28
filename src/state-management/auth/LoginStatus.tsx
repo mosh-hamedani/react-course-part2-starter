@@ -1,14 +1,14 @@
-import { useState } from "react";
+import useAuthStore from "./store";
 
 const LoginStatus = () => {
-  const [user, setUser] = useState('');
+  const { user, login, logout } = useAuthStore();
 
   if (user)
     return (
       <>
         <div>
           <span className="mx-2">{user}</span>
-          <a onClick={() => setUser('')} href="#">
+          <a onClick={() => logout()} href="#">
             Logout
           </a>
         </div>
@@ -16,7 +16,7 @@ const LoginStatus = () => {
     );
   return (
     <div>
-      <a onClick={() => setUser('mosh.hamedani')} href="#">
+      <a onClick={() => login("Hannan.Yusuf")} href="#">
         Login
       </a>
     </div>
