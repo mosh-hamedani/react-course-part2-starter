@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import usePosts from './hooks/usePosts';
 
 const PostList = () => {
 	const pageSize = 10; 
-	const [page, setPage] = useState(1);
-  	const { data: posts, error, isLoading } = usePosts({
-		page,
+  	const { data, error, isLoading, fetchNextPage, isFetchingNextPage } = usePosts({
 		pageSize
 	});
 
@@ -15,21 +13,24 @@ const PostList = () => {
 	return (
 			<>
 				<ul className="list-group">
-					{posts?.map((post) => (
-						<li key={post.id} className="list-group-item">
-						{post.title}
-						</li>
-					))}
+					{data.pages.map((page, index)=>
+						<React.Fragment key={index}>
+							{
+								page.map((post) => (
+									<li key={post.id} className="list-group-item">
+									{post.title}
+									</li>
+								))
+							}
+						</React.Fragment>
+						)
+					}
 				</ul>
 				<button 
-					className="btn btn-primary my-3"
-					disabled={page === 1}
-					onClick={()=> setPage(page - 1 )}
-				>Previous</button>
-				<button 
 					className="btn btn-primary my-3 ms-1"
-					onClick={()=> setPage(page + 1 )}
-				>Next</button>
+					disabled={isFetchingNextPage}
+					onClick={()=> fetchNextPage()}
+				>Load More</button>
 			</>
 	);
 };

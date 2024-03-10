@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 interface Post {
@@ -9,12 +9,10 @@ interface Post {
 }
 
 interface PostQuery{
-    page: number;
     pageSize: number;
-
 }
 
-const usePosts = (query: PostQuery ) => useQuery<Post[], Error>({
+const usePosts = (query: PostQuery ) => useInfiniteQuery<Post[], Error>({
     queryKey: ["users", query],
     queryFn: ()=> (
         axios
@@ -27,7 +25,10 @@ const usePosts = (query: PostQuery ) => useQuery<Post[], Error>({
 			.then(res => res.data)
     ),
     staleTime: 1 * 60 * 1000,
-    keepPreviousData: true
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, allPages) =>{
+        return  lastPage.length > 0 ? allPages.length + 1 : undefined;
+    }
 })
 
 export default usePosts;
