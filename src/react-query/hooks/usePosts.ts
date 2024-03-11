@@ -7,6 +7,7 @@ interface Post {
     body: string;
     userId: number;
 }
+
 interface PostQuery{
     pageSize: number;
 }
