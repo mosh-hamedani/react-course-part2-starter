@@ -1,20 +1,22 @@
 
-interface Action{
-    type: "LOGIN" | "LOGOUT"
-    username?: string;
+interface LoginAction{
+    type: "LOGIN" 
+    username: string;
 }
 
+interface LogoutAction{
+    type: "LOGOUT"
+}
 
-const authenticationReducer = (username: string, action: Action): string =>{
-    console.log(action)
+type authAction = LoginAction | LogoutAction;
 
+const authenticationReducer = (username: string, action: authAction): string =>{
     switch(action.type){
         case "LOGIN":
-            return action.username || "";
+            return action.username;
         case "LOGOUT":
             return "";
     }
-    return username;
 }
 
 export default authenticationReducer;
