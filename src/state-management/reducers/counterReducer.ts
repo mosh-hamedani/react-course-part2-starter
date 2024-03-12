@@ -5,7 +5,7 @@ interface Action{
 
 const counterReducer = (state: number, action: Action): number =>{
     if(action.type === "INCREMENT") return state + 1;
-    if(action.type === "RESET") return state + 0;
+    if(action.type === "RESET") return 0;
     return state;
 }
 
