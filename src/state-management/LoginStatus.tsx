@@ -3,9 +3,7 @@ import authenticationReducer from "./reducers/authenticationReducer";
 import AuthenticationContext from "./context/authenticationContext";
 
 const LoginStatus = () => {
-  // const [username, dispatch]  = useReducer(authenticationReducer, "");
   const {username, authDispatch} = useContext(AuthenticationContext);
-
 
   if (username.length)
     return (
