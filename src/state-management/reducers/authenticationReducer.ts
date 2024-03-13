@@ -8,7 +8,7 @@ interface LogoutAction{
     type: "LOGOUT"
 }
 
-type authAction = LoginAction | LogoutAction;
+export type authAction = LoginAction | LogoutAction;
 
 const authenticationReducer = (username: string, action: authAction): string =>{
     switch(action.type){

@@ -11,13 +11,18 @@ import { Dispatch } from 'react';
 import HomePage from './state-management/HomePage';
 import NavBar from './state-management/NavBar';
 import TasksContext from './state-management/context/tasksContext';
+import AuthenticationContext from './state-management/context/authenticationContext';
+import authenticationReducer from './state-management/reducers/authenticationReducer';
 
 function App() {
   const [tasks, dispatch]  = useReducer(tasksReducer, []);
+  const [username, authDispatch]  = useReducer(authenticationReducer, "");
 
   return <>
       <TasksContext.Provider value={{tasks, dispatch}}> 
-        <NavBar></NavBar>
+        <AuthenticationContext.Provider value={{username, authDispatch}}>
+          <NavBar></NavBar>
+        </AuthenticationContext.Provider>
         <HomePage></HomePage>
       </TasksContext.Provider>
     </>;
