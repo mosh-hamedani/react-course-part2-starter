@@ -14,19 +14,17 @@ interface QueryParams {
 }
 
 const usePostLists = (queries: QueryParams) => {
-    const fetchPostLists = () => 
-        axios
+
+    return useQuery<Post[], Error>({
+        queryKey: ['posts', queries],
+        queryFn: ({pageParam = 1}) => axios
         .get<Post[]>('https://jsonplaceholder.typicode.com/posts', {
             params: {
                 _start: (queries.page - 1) * queries.pageSize,
                 _limit: queries.pageSize
             }
         })
-        .then(res => res.data);
-
-    return useQuery<Post[], Error>({
-        queryKey: ['posts', queries],
-        queryFn: fetchPostLists,
+        .then(res => res.data),
         staleTime: 10 * 1000,
         placeholderData: keepPreviousData
     })
