@@ -19,7 +19,9 @@ const PostList = () => {
       >
         <option></option>
         {userIdList.map((id, index) => (
-          <option key={index}>{id}</option>
+          <option key={index} value={id}>
+            User {id}
+          </option>
         ))}
       </select>
 

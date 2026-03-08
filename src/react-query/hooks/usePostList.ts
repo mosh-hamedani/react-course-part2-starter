@@ -8,6 +8,8 @@ interface Post {
   userId: number;
 }
 
+
+
 const usePostLists = (userId: number | undefined) => {
     const fetchPostLists = () => 
         axios
